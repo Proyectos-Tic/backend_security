@@ -26,7 +26,7 @@ public class PermissionController {
         return this.permissionServices.show(id);
     }
 
-    @GetMapping("/create")
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public Permission createPermission(@RequestBody Permission permission){
         return this.permissionServices.create(permission);
