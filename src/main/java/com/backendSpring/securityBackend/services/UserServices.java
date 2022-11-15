@@ -99,6 +99,11 @@ public class UserServices {
     }
 
 
+    /**
+     *
+     * @param user
+     * @return HashMap
+     */
     public HashMap<String, Boolean> login(User user){
         HashMap<String, Boolean> response = new HashMap<>();
         if(user.getPassword()!= null && user.getEmail()!=null){
