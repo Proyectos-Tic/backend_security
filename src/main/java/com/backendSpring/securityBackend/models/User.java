@@ -1,5 +1,7 @@
 package com.backendSpring.securityBackend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -13,6 +15,10 @@ public class User implements Serializable {
     private String email;
     private String password;
 
+    @ManyToOne
+    @JoinColumn(name = "idRol") // Foreign key
+    @JsonIgnoreProperties("users")
+    private Rol rol;
 
     public Integer getIdUser() {
         return idUser;
