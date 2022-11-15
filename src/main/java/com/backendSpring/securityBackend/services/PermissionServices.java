@@ -2,6 +2,7 @@ package com.backendSpring.securityBackend.services;
 
 import com.backendSpring.securityBackend.models.Permission;
 import com.backendSpring.securityBackend.repositories.PermissionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Optional;
 @Service
 public class PermissionServices {
 
+    @Autowired
     private PermissionRepository permissionRepository;
 
     /**
