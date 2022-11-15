@@ -13,6 +13,7 @@ public class Rol implements Serializable { //Efficient obj management
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idRol;
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
     private String description;
     //Cascade: to prevent problem with foreign keys related to PKeys

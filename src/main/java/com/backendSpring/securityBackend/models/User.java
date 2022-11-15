@@ -11,8 +11,11 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idUser;
+    @Column(name = "nickname", nullable = false, unique = true)
     private String nickname;
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+    @Column(name = "password", nullable = false)
     private String password;
 
     @ManyToOne
@@ -22,10 +25,6 @@ public class User implements Serializable {
 
     public Integer getIdUser() {
         return idUser;
-    }
-
-    public void setIdUser(Integer idUser) {
-        this.idUser = idUser;
     }
 
     public String getNickname() {
