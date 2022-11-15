@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,13 @@ public class UserController {
     @GetMapping("/{id}")
     public Optional<User> getUserById(@PathVariable("id") int id){
         return this.userServices.show(id);
+    }
+
+    //TODO DAO
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public HashMap<String, Boolean> loginUser(@RequestBody User user){
+        return this.userServices.login(user);
     }
 
     @PostMapping("/create")

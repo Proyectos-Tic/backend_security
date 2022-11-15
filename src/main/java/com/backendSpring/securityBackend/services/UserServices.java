@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,6 +98,25 @@ public class UserServices {
         }).orElse(false);
     }
 
+
+    public HashMap<String, Boolean> login(User user){
+        HashMap<String, Boolean> response = new HashMap<>();
+        if(user.getPassword()!= null && user.getEmail()!=null){
+            String email = user.getEmail();
+            String password = this.convertToSHA256( user.getPassword() );
+            Optional<User> result = this.userRepository.login(email, password);
+            if(result.isEmpty()){
+                response.put("access", false);
+            }
+            else {
+                response.put("access",true);
+            }
+        }
+        else {
+            response.put("access", false);
+        }
+        return response;
+    }
     /**
      *
      * @param password
