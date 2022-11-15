@@ -5,6 +5,8 @@ import com.backendSpring.securityBackend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +43,7 @@ public class UserServices {
     public User create(User newUser){
         if ( newUser.getIdUser() == null){
             if(newUser.getEmail() != null && newUser.getNickname() != null && newUser.getPassword() != null){
+                newUser.setPassword(this.convertToSHA256(newUser.getPassword()));
                 return this.userRepository.save(newUser);
             }else {
                 // TODO 400 BadRequest
@@ -68,7 +71,7 @@ public class UserServices {
                     //tempUser.get() -> User
                     tempUser.get().setNickname(updatedUser.getNickname());
                 if(updatedUser.getPassword()!=null)
-                    tempUser.get().setPassword(updatedUser.getPassword());
+                    tempUser.get().setPassword(this.convertToSHA256(updatedUser.getPassword()));
                 return this.userRepository.save(tempUser.get());
             }
             else {
@@ -92,5 +95,30 @@ public class UserServices {
             this.userRepository.delete(user);
             return true;
         }).orElse(false);
+    }
+
+    /**
+     *
+     * @param password
+     * @return String
+     */
+    public String convertToSHA256(String password){
+        MessageDigest md = null;
+        try{
+            md = MessageDigest.getInstance("SHA-256");
+
+        }
+        catch (NoSuchAlgorithmException e){
+            e.printStackTrace();
+            return null;
+        }
+        //Encrypt the password using its bytes equivalent
+        byte[] hash = md.digest(password.getBytes());
+        StringBuffer sb = new StringBuffer();
+        for( byte b: hash){
+            // Add each character in String representation to the buffer (casting from Byte HEX)
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
     }
 }
