@@ -3,7 +3,9 @@ package com.backendSpring.securityBackend.services;
 import com.backendSpring.securityBackend.models.User;
 import com.backendSpring.securityBackend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -116,21 +118,23 @@ public class UserServices {
      * @return HashMap
      *
      */
-    public HashMap<String, Boolean> login(User user){
-        HashMap<String, Boolean> response = new HashMap<>();
+    public User login(User user){
+        User response = null;
         if(user.getPassword()!= null && user.getEmail()!=null){
             String email = user.getEmail();
             String password = this.convertToSHA256( user.getPassword() );
             Optional<User> result = this.userRepository.login(email, password);
             if(result.isEmpty()){
-                response.put("access", false);
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
+                        "Invalid access.");
             }
             else {
-                response.put("access",true);
+                response = result.get();
             }
         }
         else {
-            response.put("access", false);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Mandatory fields had not been sent");
         }
         return response;
     }

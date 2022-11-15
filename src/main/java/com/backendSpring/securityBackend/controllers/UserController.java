@@ -39,7 +39,7 @@ public class UserController {
     //TODO DAO
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public HashMap<String, Boolean> loginUser(@RequestBody User user){
+    public User loginUser(@RequestBody User user){
         return this.userServices.login(user);
     }
 
