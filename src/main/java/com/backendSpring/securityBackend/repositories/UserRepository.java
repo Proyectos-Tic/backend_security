@@ -10,6 +10,11 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends CrudRepository<User, Integer> { //<Model, ID_Type>
 
+    Optional<User> findByNickname(String nickname);
+    // SELECT * FROM user where nickname=?;
+
+    Optional<User> findByEmail(String email);
+
     @Query(value = "SELECT * FROM user WHERE email=? and password=?;",nativeQuery = true)
-    public Optional<User> login(String email, String password);
+    Optional<User> login(String email, String password);
 }

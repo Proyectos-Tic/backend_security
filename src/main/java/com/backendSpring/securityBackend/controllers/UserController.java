@@ -21,9 +21,19 @@ public class UserController {
         return this.userServices.index();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/by_id/{id}")
     public Optional<User> getUserById(@PathVariable("id") int id){
         return this.userServices.show(id);
+    }
+
+    @GetMapping("/by_nickname/{nickname}")
+    public Optional<User> getNicknameById(@PathVariable("nickname") String nickname){
+        return this.userServices.showByNickname(nickname);
+    }
+
+    @GetMapping("/by_email/{email}")
+    public Optional<User> getEmailById(@PathVariable("email") String email){
+        return this.userServices.showByEmail(email);
     }
 
     //TODO DAO

@@ -38,6 +38,17 @@ public class UserServices {
 
     /**
      *
+     * @param nickname
+     * @return Optional<User>
+     */
+    public Optional<User> showByNickname(String nickname){
+        return this.userRepository.findByNickname(nickname);
+    }
+    public Optional<User> showByEmail(String email){
+        return this.userRepository.findByEmail(email);
+    }
+    /**
+     *
      * @param newUser
      * @return User
      */
