@@ -12,14 +12,28 @@ public class PermissionServices {
 
     private PermissionRepository permissionRepository;
 
+    /**
+     *
+     * @return List<Permission>
+     */
     public List<Permission> index(){
         return (List<Permission>) this.permissionRepository.findAll();
     }
 
+    /**
+     *
+     * @param id
+     * @return Optional<Permission>
+     */
     public Optional<Permission> show(int id){
         return this.permissionRepository.findById(id);
     }
 
+    /**
+     *
+     * @param newPermission
+     * @return Permission
+     */
     public Permission create(Permission newPermission){
         if(newPermission.getIdPermission() == null){
             if(newPermission.getMethod()!=null && newPermission.getUrl()!=null){
@@ -36,6 +50,12 @@ public class PermissionServices {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @param updatedPermission
+     * @return Permission
+     */
     public Permission update(int id, Permission updatedPermission){
         if(id>0){
             // Find the object to update
@@ -61,6 +81,11 @@ public class PermissionServices {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @return boolean
+     */
     public boolean delete(int id){
      return this.show(id).map( permission -> {
          this.permissionRepository.delete(permission);

@@ -13,14 +13,28 @@ public class RolServices {
     @Autowired
     private RolRepository rolRepository;
 
+    /**
+     *
+     * @return List<Rol>
+     */
     public List<Rol> index(){
     return (List<Rol>) this.rolRepository.findAll();
     }
 
+    /**
+     *
+     * @param id
+     * @return Optional<Rol>
+     */
     public Optional<Rol> show(int id){
     return this.rolRepository.findById(id);
     }
 
+    /**
+     *
+     * @param newRol
+     * @return Rol
+     */
     public Rol create(Rol newRol){
     if(newRol.getIdRol() == null){
         // Name restriction to create a rol
@@ -38,6 +52,12 @@ public class RolServices {
     }
     }
 
+    /**
+     *
+     * @param id
+     * @param updatedRol
+     * @return Rol
+     */
     public Rol update(int id, Rol updatedRol){
         if(id>0){
             Optional<Rol> tempRol = this.show(id);
@@ -63,6 +83,11 @@ public class RolServices {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @return boolean
+     */
     public boolean delete(int id){
         return this.show(id).map( rol -> {
             this.rolRepository.delete(rol);

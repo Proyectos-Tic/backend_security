@@ -18,16 +18,26 @@ public class UserServices {
 
     /**
      *
-     * @return
+     * @return List<User>
      */
     public List<User> index(){
         return (List<User>) this.userRepository.findAll();
     }
 
+    /**
+     *
+     * @param id
+     * @return Optional<User>
+     */
     public Optional<User> show(int id){
         return  this.userRepository.findById(id);
     }
 
+    /**
+     *
+     * @param newUser
+     * @return User
+     */
     public User create(User newUser){
         if ( newUser.getIdUser() == null){
             if(newUser.getEmail() != null && newUser.getNickname() != null && newUser.getPassword() != null){
@@ -43,6 +53,12 @@ public class UserServices {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @param updatedUser
+     * @return User
+     */
     public User update(int id, User updatedUser){
         if(id>0){
             Optional<User> tempUser = this.show(id);
@@ -66,6 +82,11 @@ public class UserServices {
         }
     }
 
+    /**
+     *
+     * @param id
+     * @return boolean
+     */
     public boolean delete(int id){
         return this.show(id).map( user -> {
             this.userRepository.delete(user);
