@@ -51,4 +51,12 @@ public class User implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
 }
