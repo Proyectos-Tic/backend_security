@@ -38,7 +38,7 @@ public class UserController {
 
     //TODO DAO
     @PostMapping("/login")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     public User loginUser(@RequestBody User user){
         return this.userServices.login(user);
     }
