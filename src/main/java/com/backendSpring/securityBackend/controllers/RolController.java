@@ -44,7 +44,7 @@ public class RolController {
         return this.rolServices.update(id, updatedRol);
     }
 
-    @PostMapping("/update/{idRol}/add_permission/{idPermission}")
+    @PutMapping("/update/{idRol}/add_permission/{idPermission}")
     public ResponseEntity<Rol> updateAddPermission(@PathVariable("idRol") int idRol, @PathVariable("idPermission") int idPermission){
         return this.rolServices.updateAppPermission(idRol,idPermission);
     }
