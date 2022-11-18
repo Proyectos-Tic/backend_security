@@ -4,6 +4,10 @@ import com.mintic2022c4.c11g3.securityBackend.models.User;
 import com.mintic2022c4.c11g3.securityBackend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,8 +43,10 @@ public class UserServices {
      */
     public User create(User newUser){
         if(newUser.getId() == null){
-            if(newUser.getNickname() != null && newUser.getNickname() != null && newUser.getPassword() != null)
+            if(newUser.getNickname() != null && newUser.getNickname() != null && newUser.getPassword() != null){
+                newUser.setPassword(this.convertToSHA256(newUser.getPassword()));
                 return this.userRepository.save(newUser);
+            }
             else {
                 // TODO 400 BAD REQUEST ?
                 return newUser;
@@ -66,7 +72,7 @@ public class UserServices {
                 if (updatedUser.getNickname() != null)
                     tempUser.get().setNickname(updatedUser.getNickname());
                 if (updatedUser.getPassword() != null)
-                    tempUser.get().setPassword(updatedUser.getPassword());
+                    tempUser.get().setPassword(this.convertToSHA256(updatedUser.getPassword()));
                 return this.userRepository.save(tempUser.get());
             }
             else {
@@ -91,5 +97,38 @@ public class UserServices {
             return true;
         }).orElse(false);
         return success;
+    }
+
+    public HashMap<String, Boolean> login(User user){
+        HashMap<String, Boolean> response = new HashMap<>();
+        if (user.getEmail() != null && user.getPassword() != null) {
+            String email = user.getEmail();
+            String password = this.convertToSHA256(user.getPassword());
+            Optional<User> result = this.userRepository.login(email, password);
+            if(result.isEmpty())
+                response.put("access", false);
+            else
+                response.put("access", true);
+        }
+        else {
+            response.put("access", false);
+        }
+        return response;
+    }
+
+    public String convertToSHA256(String password){
+        MessageDigest md = null;
+        try{
+            md = MessageDigest.getInstance("SHA-256");
+        }
+        catch(NoSuchAlgorithmException e){
+            e.printStackTrace();
+            return null;
+        }
+        byte[] hash = md.digest(password.getBytes());
+        StringBuffer sb = new StringBuffer();
+        for(byte b: hash)
+            sb.append( String.format("%02x", b));
+        return sb.toString();
     }
 }
