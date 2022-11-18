@@ -138,7 +138,7 @@ public class RolServices {
      *
      * @param idRol
      * @param permission
-     * @return ResponseEntity<Boolean>
+     * @return ResponseEntity<Boolean>Test
      */
     public ResponseEntity<Boolean> validateGrant(int idRol, Permission permission){
         boolean isGrant = false;
