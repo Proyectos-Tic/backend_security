@@ -3,7 +3,9 @@ package com.mintic2022c4.c11g3.securityBackend.services;
 import com.mintic2022c4.c11g3.securityBackend.models.User;
 import com.mintic2022c4.c11g3.securityBackend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -33,6 +35,14 @@ public class UserServices {
      */
     public Optional<User> show(int id){
         return this.userRepository.findById(id);
+    }
+
+    public Optional<User> showByNickname (String nickname) {
+        return this.userRepository.findByNickname(nickname);
+    }
+
+    public Optional<User> showByEmail(String email){
+        return this.userRepository.findByEmail(email);
     }
 
     /**
@@ -99,19 +109,19 @@ public class UserServices {
         return success;
     }
 
-    public HashMap<String, Boolean> login(User user){
-        HashMap<String, Boolean> response = new HashMap<>();
+    public User login(User user){
+        User response;
         if (user.getEmail() != null && user.getPassword() != null) {
             String email = user.getEmail();
             String password = this.convertToSHA256(user.getPassword());
             Optional<User> result = this.userRepository.login(email, password);
             if(result.isEmpty())
-                response.put("access", false);
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
             else
-                response.put("access", true);
+                response = result.get();
         }
         else {
-            response.put("access", false);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         return response;
     }

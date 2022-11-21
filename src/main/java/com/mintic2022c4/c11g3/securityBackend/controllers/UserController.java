@@ -26,6 +26,16 @@ public class UserController {
         return this.userServices.show(id);
     }
 
+    @GetMapping("/by_nickname/{nickname}>")
+    public Optional<User> getUserByNickname(@PathVariable("nickname") String nickname){
+        return this.userServices.showByNickname(nickname);
+    }
+
+    @GetMapping("/by_email/{email}")
+    public Optional<User> getUserByEmail(@PathVariable("email") String email){
+        return this.userServices.showByEmail(email);
+    }
+
     @PostMapping("/insert")
     @ResponseStatus(HttpStatus.CREATED)
     public User insertUser(@RequestBody User user){
@@ -33,8 +43,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public HashMap<String, Boolean> loginUser(@RequestBody User user){
+    public User loginUser(@RequestBody User user){
         return this.userServices.login(user);
     }
 
