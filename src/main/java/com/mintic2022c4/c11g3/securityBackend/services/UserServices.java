@@ -4,6 +4,7 @@ import com.mintic2022c4.c11g3.securityBackend.models.User;
 import com.mintic2022c4.c11g3.securityBackend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -98,6 +99,7 @@ public class UserServices {
 
     /**
      * Delete an existing user providing its id.
+     *
      * @param id
      * @return
      */
@@ -109,7 +111,12 @@ public class UserServices {
         return success;
     }
 
-    public User login(User user){
+    /**
+     *
+     * @param user
+     * @return
+     */
+    public ResponseEntity<User> login(User user){
         User response;
         if (user.getEmail() != null && user.getPassword() != null) {
             String email = user.getEmail();
@@ -123,7 +130,7 @@ public class UserServices {
         else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        return response;
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     public String convertToSHA256(String password){

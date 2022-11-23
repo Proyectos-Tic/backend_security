@@ -4,6 +4,7 @@ import com.mintic2022c4.c11g3.securityBackend.models.User;
 import com.mintic2022c4.c11g3.securityBackend.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -43,7 +44,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public User loginUser(@RequestBody User user){
+    public ResponseEntity<User> loginUser(@RequestBody User user){
         return this.userServices.login(user);
     }
 
