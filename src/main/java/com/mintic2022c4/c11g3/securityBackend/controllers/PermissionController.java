@@ -26,19 +26,16 @@ public class PermissionController {
     }
 
     @PostMapping("/insert")
-    @ResponseStatus(HttpStatus.CREATED)
     public Permission insertPermission(@RequestBody Permission permission){
         return this.permissionServices.create(permission);
     }
 
     @PutMapping("/update/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
     public Permission updatePermission(@PathVariable("id") int id,@RequestBody Permission permission){
         return this.permissionServices.update(id, permission);
     }
 
     @DeleteMapping("/delete/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public boolean deleteUser(@PathVariable("id") int id){
         return this.permissionServices.delete(id);
     }

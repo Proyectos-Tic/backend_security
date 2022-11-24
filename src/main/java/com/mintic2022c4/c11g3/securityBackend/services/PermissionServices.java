@@ -3,7 +3,9 @@ package com.mintic2022c4.c11g3.securityBackend.services;
 import com.mintic2022c4.c11g3.securityBackend.models.Permission;
 import com.mintic2022c4.c11g3.securityBackend.repositories.PermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,13 +42,12 @@ public class PermissionServices {
             if(newPermission.getUrl() != null && newPermission.getMethod() != null)
                 return this.permissionRepository.save(newPermission);
             else {
-                // TODO 400 BAD REQUEST ?
-                return newPermission;
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "This Request does not contain a url or method.");
             }
         }
         else{
-            // TODO VALIDATE IF PERMISSION EXISTS ? 400 BAD REQUEST ?
-            return newPermission;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This permission already exists.");
         }
     }
 
@@ -67,13 +68,12 @@ public class PermissionServices {
                 return this.permissionRepository.save(tempPermission.get());
             }
             else {
-                // TODO 404 NOT FOUND ?
-                return updatedPermission;
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "The requested permission could not be found.");
             }
         }
         else {
-            // TODO 400 BAD REQUEST ? id <= 0
-            return updatedPermission;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The requested permission contains an invalid id");
         }
     }
 

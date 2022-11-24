@@ -1,5 +1,7 @@
 package com.mintic2022c4.c11g3.securityBackend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -11,13 +13,14 @@ public class Permission implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idPermission;
 
-    @Column(name= "url", nullable = false, unique = true)
+    @Column(name= "url", nullable = false)
     private String url;
 
     @Column(name= "method", nullable = false)
     private String method;
 
     @ManyToMany(mappedBy = "permissions")
+    @JsonIgnoreProperties("permissions")
     private Set<Rol> roles;
 
     public Integer getId() {

@@ -43,14 +43,13 @@ public class RolController {
         return this.rolServices.update(id, rol);
     }
 
-    @PutMapping("/update/{idRol}//add_permission/{idPermission}")
+    @PutMapping("/update/{idRol}/add_permission/{idPermission}")
     public ResponseEntity<Rol> updateAddPermission(@PathVariable("idRol") int idRol,
                                                    @PathVariable("idPermission") int idPermission){
         return this.rolServices.updateAddPermission(idRol,idPermission);
     }
 
     @DeleteMapping("/delete/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public boolean deleteRol(@PathVariable("id") int id){
         return this.rolServices.delete(id);
     }

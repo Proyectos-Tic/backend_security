@@ -39,11 +39,19 @@ public class UserServices {
     }
 
     public Optional<User> showByNickname (String nickname) {
-        return this.userRepository.findByNickname(nickname);
+        Optional<User> user = this.userRepository.findByNickname(nickname);
+        if(user.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user with the requested nickname exists.");
+        }
+        return user;
     }
 
     public Optional<User> showByEmail(String email){
-        return this.userRepository.findByEmail(email);
+        Optional<User> user = this.userRepository.findByEmail(email);
+        if(user.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user with the requested email exists.");
+        }
+        return user;
     }
 
     /**
@@ -54,18 +62,30 @@ public class UserServices {
      */
     public User create(User newUser){
         if(newUser.getId() == null){
-            if(newUser.getNickname() != null && newUser.getNickname() != null && newUser.getPassword() != null){
+            if(newUser.getEmail() != null && newUser.getNickname() != null
+                    && newUser.getPassword() != null && newUser.getRol() != null){
+
+                Optional<User> tempUser = this.showByNickname(newUser.getNickname());
+                if (tempUser.isPresent())
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                            "User nickname has already been taken.");
+
+                tempUser = this.showByNickname(newUser.getEmail());
+                if (tempUser.isPresent())
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                            "User email has already been used.");
+
                 newUser.setPassword(this.convertToSHA256(newUser.getPassword()));
                 return this.userRepository.save(newUser);
             }
             else {
-                // TODO 400 BAD REQUEST ?
-                return newUser;
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "The request does not contain sufficient data to create a new user.");
             }
         }
         else{
-            // TODO VALIDATE IF USER EXISTS ? 400 BAD REQUEST ?
-            return newUser;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "The request contains an id which may cause conflict during the creation process.");
         }
     }
 
@@ -84,16 +104,24 @@ public class UserServices {
                     tempUser.get().setNickname(updatedUser.getNickname());
                 if (updatedUser.getPassword() != null)
                     tempUser.get().setPassword(this.convertToSHA256(updatedUser.getPassword()));
-                return this.userRepository.save(tempUser.get());
+                if (updatedUser.getRol() != null)
+                    tempUser.get().setRol(updatedUser.getRol());
+                try{
+                    return this.userRepository.save(tempUser.get());
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                    throw new ResponseStatusException(HttpStatus.CONFLICT,
+                            "Some of the new values entered in the request may be unique " +
+                                    "and already existing within the db.");
+                }
             }
             else {
-                // TODO 404 NOT FOUND ?
-                return updatedUser;
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The requested user could not be found.");
             }
         }
         else {
-            // TODO 400 BAD REQUEST ? id <= 0
-            return updatedUser;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The request contains an invalid user id.");
         }
     }
 
@@ -103,12 +131,16 @@ public class UserServices {
      * @param id
      * @return
      */
-    public boolean delete(int id){
+    public ResponseEntity<Boolean> delete(int id){
         Boolean success = this.show(id).map(user -> {
             this.userRepository.delete(user);
             return true;
         }).orElse(false);
-        return success;
+        if (success)
+            return new ResponseEntity<>(true, HttpStatus.NO_CONTENT);
+        else
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Requested user could not be deleted, recommended verifying its existence.");
     }
 
     /**

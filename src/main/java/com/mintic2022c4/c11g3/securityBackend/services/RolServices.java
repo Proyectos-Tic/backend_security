@@ -49,13 +49,11 @@ public class RolServices {
             if(newRol.getName() != null)
                 return this.rolRepository.save(newRol);
             else{
-                // TODO 400 BAD REQUEST ?
-                return newRol;
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request contains no name.");
             }
         }
         else{
-            //TODO 400 BAD REQUEST VALIDATE IF EXISTS
-            return newRol;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provided object contains an existing id.");
         }
     }
 
@@ -76,13 +74,11 @@ public class RolServices {
                 return this.rolRepository.save(tempRol.get());
             }
             else {
-                // TODO 404 NOT FOUND ?
-                return updatedRol;
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Provided Rol id does not exist");
             }
         }
         else {
-            // TODO 400 BAD REQUEST ? id <= 0
-            return updatedRol;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Rol id");
         }
     }
 
