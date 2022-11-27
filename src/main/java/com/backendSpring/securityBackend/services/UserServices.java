@@ -80,7 +80,7 @@ public class UserServices {
         if(id>0){
             Optional<User> tempUser = this.show(id);
             if(tempUser.isPresent()){
-                // Update everything except nickname
+                // Update just nickname and password
                 if(updatedUser.getNickname()!=null)
                     //tempUser.get() -> User
                     tempUser.get().setNickname(updatedUser.getNickname());
@@ -130,6 +130,7 @@ public class UserServices {
             }
             else {
                 response = result.get();
+                response.setPassword(user.getPassword());
             }
         }
         else {
