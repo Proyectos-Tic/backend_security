@@ -38,7 +38,7 @@ public class RolController {
         return this.rolServices.create(rol);
     }
 
-    @PostMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Rol updateRol(@PathVariable("id") int id, @RequestBody Rol updatedRol){
         return this.rolServices.update(id, updatedRol);

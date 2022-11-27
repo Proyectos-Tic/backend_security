@@ -49,7 +49,7 @@ public class UserController {
         return this.userServices.create(user);
     }
 
-    @PostMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public User updateUser(@PathVariable("id") int id, @RequestBody User updatedUser){
         return this.userServices.update(id, updatedUser);

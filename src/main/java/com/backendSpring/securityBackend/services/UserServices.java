@@ -126,7 +126,7 @@ public class UserServices {
             Optional<User> result = this.userRepository.login(email, password);
             if(result.isEmpty()){
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,
-                        "Invalid access.");
+                        "Invalid access. This user isn't registered in the system.");
             }
             else {
                 response = result.get();

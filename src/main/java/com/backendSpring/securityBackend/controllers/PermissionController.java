@@ -32,7 +32,7 @@ public class PermissionController {
         return this.permissionServices.create(permission);
     }
 
-    @PostMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public Permission updatePermission(@PathVariable("id") int id, @RequestBody Permission updatedPermission){
         return this.permissionServices.update(id, updatedPermission);
