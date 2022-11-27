@@ -82,12 +82,14 @@ public class RolServices {
             }
             else {
                 // TODO 404 NotFound
-                return  updatedRol;
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND,"" +
+                        "Provide rol.id does not exist in DB.");
             }
         }
         else {
             // TODO 400 BadRequest
-            return updatedRol;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Provide rol.id does not exist in DB");
         }
     }
 
