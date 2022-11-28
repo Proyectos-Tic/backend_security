@@ -40,7 +40,7 @@ public class UserServices {
 
     public Optional<User> showByNickname (String nickname) {
         Optional<User> user = this.userRepository.findByNickname(nickname);
-        if(user.isEmpty()){
+        if(user.isPresent()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user with the requested nickname exists.");
         }
         return user;
@@ -48,7 +48,7 @@ public class UserServices {
 
     public Optional<User> showByEmail(String email){
         Optional<User> user = this.userRepository.findByEmail(email);
-        if(user.isEmpty()){
+        if(user.isPresent()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user with the requested email exists.");
         }
         return user;
